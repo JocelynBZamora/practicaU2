@@ -1,0 +1,13 @@
+﻿@model practicaU2.Models.ViewModels.IndexViewModel
+@{
+    Layout = "Layout";
+}
+<h1>Oferta Académica</h1>
+
+
+<ol class="rectangle-list">
+    @foreach (var carrera in Model.Carreras)
+    {
+        <li><a href="/info/@carrera.Nombre.ToLower().Replace(" ","_")">@carrera.Plan @carrera.Nombre</a></li>
+    }
+</ol>

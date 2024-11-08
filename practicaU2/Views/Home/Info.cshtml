@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "Layout";
+}
+@model practicaU2.Models.ViewModels.InfoViewModel
+<main>
+    <h1>
+        <a class="btn" href="javascript: history.back()">&#x25c0;  Regresar</a>
+
+        @Model.Nombre
+    </h1>
+
+    <div class="info">
+        <img src="~/images/@(Model.Id).jpg" />
+        <a class="btn" href="mapa.html">Ver mapa curricular</a>
+    </div>
+    <div class="info">
+        <dl>
+            <dt>Descripción:</dt>
+            <dd>@Model.Descripcion</dd>
+            <dt>Plan de estudios:</dt>
+            <dd>@Model.Plan</dd>
+            <dt>Especialidad:</dt>
+            <dd>@Model.Especialidad</dd>
+        </dl>
+    </div>
+
+
+</main>
