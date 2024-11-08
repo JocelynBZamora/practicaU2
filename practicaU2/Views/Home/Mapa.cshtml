@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "Layout";
+}
+@model practicaU2.Models.ViewModels.MapaViewModel
+
+    <h1>
+        <a class="btn" href="javascript: history.back()">&#x25c0; Regresar</a>
+        @Model.NombreCarrera
+    </h1>
+
+
+
+    <h2>@Model.Plan</h2>
+    <h2>Total de creditos: @Model.TotalCreditos</h2>
+    <section class="reticula">
+        <table>
+            <thead>
+                <tr>
+                    @foreach (var semestr in Model.Semestres)
+                    {
+
+                        <th>@semestr.Numero semestre</th>
+                    }
+
+                </tr>
+            </thead>
+            <tr>
+                @foreach (var semestr in Model.Semestres)
+                {
+
+                    <td>
+                        @foreach (var mteria in semestr.Materias)
+                        {
+                            <div class="materia">
+                                <span class="clave">@mteria.Clave</span>
+                                <span class="nombre">@mteria.Nombre</span>
+                                <span class="tpc">@mteria.HorasTeoricas-@mteria.HorasPracticas-@mteria.Creditos</span>
+                            </div>
+                        }
+
+                    </td>
+                }
+
+
+            </tr>
+
+        </table>
+    </section>
+
