@@ -10,20 +10,22 @@ namespace practicaU2.Controllers
         MapaCurricularContext context = new();
         public IActionResult Index()
         {
-         var vm = new IndexViewModel 
-         {
-             Carreras = context.Carreras.OrderBy(x=>x.Nombre).Select(x=> new CarreraModel
-             { Nombre = x.Nombre,
-             Plan = x.Plan})
-         };
+            var vm = new IndexViewModel
+            {
+                Carreras = context.Carreras.OrderBy(x => x.Nombre).Select(x => new CarreraModel
+                {
+                    Nombre = x.Nombre,
+                    Plan = x.Plan
+                })
+            };
             return View(vm);
         }
         [Route("Info/{nombreCarrera}")]
         public IActionResult Info(string nombreCarrera)
         {
-            nombreCarrera = nombreCarrera.Replace("_"," ");
+            nombreCarrera = nombreCarrera.Replace("_", " ");
             var existente = context.Carreras.Any(x => x.Nombre.ToLower() == nombreCarrera);
-            if (existente is false) 
+            if (existente is false)
             {
                 return RedirectToAction("Index");
             }
@@ -41,43 +43,36 @@ namespace practicaU2.Controllers
         }
         [Route("Mapa/{nombreCarrera}")]
 
-        public IActionResult Mapa(string nombreCarrera) 
+        public IActionResult Mapa(string nombreCarrera)
         {
             nombreCarrera = nombreCarrera.Replace("_", " ");
-            var existe = context.Carreras.Any(c => c.Nombre.ToLower() == nombreCarrera);
-
-            if (existe is false) return RedirectToAction("Index");
-
-            var vm = context.Carreras
-                .Where(x => x.Nombre.ToLower() == nombreCarrera)
-                .Select(x => new MapaViewModel
+            var existe = context.Carreras.Any(x => x.Nombre.ToLower() == nombreCarrera);
+            var vm = context.Carreras.Where(z => z.Nombre.ToLower() == nombreCarrera).
+                Select(x => new MapaViewModel
                 {
                     NombreCarrera = x.Nombre,
                     Plan = x.Plan,
-                    TotalCreditos = context.Materias
-                        .Where(x => x.IdCarreraNavigation.Nombre == x.Nombre)
-                        .Sum(m => m.Creditos),
-                    Semestres = context.Materias
-                        .Where(x => x.IdCarreraNavigation.Nombre == x.Nombre)
-                        .GroupBy(x => x.Semestre)
-                        .OrderBy(x => x.Key)
-                        .Select(x => new SemestreModel
-                        {
-                            Numero = x.Key,
-                            Materias = x.Select(x => new MateriaModel
-                            {
-                                Clave = x.Clave,
-                                Nombre = x.Nombre,
-                                HorasTeoricas = x.HorasTeoricas,
-                                HorasPracticas = x.HorasPracticas,
-                                Creditos = x.Creditos
-                            })
-                        })
-                        .ToList()
-                })
-                .First();
+                    TotalCreditos = context.Materias.Where(c => c.IdCarreraNavigation.Nombre == x.Nombre)
+                   .Sum(m => m.Semestre),
+                    Semestres = context.Materias.Where(m => m.IdCarreraNavigation.Nombre == x.Nombre).
+                   GroupBy(m => m.Semestre).OrderBy(m => m.Key).Select(s => new SemestreModel
+                   {
+                       Numero = s.Key,
+                       Materias = s.Select(m => new MateriaModel
+                       {
+                           Clave = m.Clave,
+                           Creditos = m.Creditos,
+                           HorasPracticas = m.Creditos,
+                           HorasTeoricas = m.HorasTeoricas,
+                           Nombre = m.Nombre
+
+                       })
+                   }).ToList()
+                }).First();
+
 
             return View(vm);
         }
     }
 }
+
